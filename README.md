@@ -1,37 +1,57 @@
-# Vapi Integration Starter Template
+# 🧠 Budger AI Voice Assistant – Vapi Integration
 
-This starter template is designed to help you quickly integrate Vapi into your project. It showcases a bot that assists authors in defining characters for their stories, demonstrating the ease of integrating Vapi to manipulate the frontend, display backend results, and leverage other capabilities.
+This project is a **real-time AI voice assistant** built using **React** and **Vapi.ai SDK**. It allows users to have full-duplex voice conversations powered by GPT and custom backend logic.
 
-## Features
+## 🔥 Features
 
-- **Real-time Interaction**: Interact with the bot in real-time to refine character traits and details.
-- **Message Handling**: Send and receive messages to and from the bot, handling different message types.
-- **Audio Level Visualization**: Visual feedback on the audio level during bot interaction.
-- **Event Handling**: Start, stop, and toggle bot calls with proper event management.
+- 🎙️ **Full-Duplex Conversation** – The assistant listens and speaks simultaneously
+- ⚡ **Real-Time Streaming** – Sends and receives messages instantly via Vapi SDK
+- 🛠️ **Custom Backend Integration** – Can be connected with FastAPI or other APIs
+- 🎛️ **Audio Level Visualization** – Visual feedback while speaking/listening
+- 🧩 **Modular Components** – Easily customizable frontend
 
-## Getting Started
+## 📦 Tech Stack
 
-1. Clone the repository.
-2. Install dependencies with `npm install`.
-3. Set up your `.env` file with the required Vapi tokens.
-4. Run the development server with `npm run dev`.
+- React + TypeScript
+- Vapi.ai SDK (`@vapi-ai/web`)
+- Tailwind CSS
+- Node.js + npm
 
-## Integration Points
+---
 
-- **Vapi SDK**: Integrated via `vapi.sdk.ts` to manage the Vapi instance.
-- **React Hooks**: `useVapi.ts` to encapsulate Vapi logic within React components.
-- **Event Listeners**: Set up listeners for various Vapi events like speech start/end, call start/end, and message updates.
-- **Message Components**: Render messages and transcripts in real-time as they are received from the bot.
-- **Character Details**: Edit and save character details, which are then sent as messages to the bot for processing.
+## 🚀 Getting Started
 
-## Project Structure
+### 1. Clone the Repository
 
-- `src/`: Source files for the application.
-- `src/features/Assistant/`: Components and hooks related to Vapi integration.
-- `src/features/Character/`: Components for character details and manipulation.
-- `src/lib/`: Shared types and utility functions.
-- `src/components/ui/`: Reusable UI components.
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
 
-## Customization
+### 2. Install Dependencies
 
-You can customize the bot's behavior and appearance by modifying the `character.assistant.ts` and the corresponding React components.
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a .env file in the root and add the following:
+
+```bash
+VITE_VAPI_API_URL=https://api.vapi.ai
+VITE_VAPI_WEB_TOKEN=your-web-token-here
+VITE_VAPI_AGENT_ID=your-agent-id-here
+```
+
+📝 Replace the placeholders with your actual Vapi.ai API credentials.
+
+### 4. Run the project
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173 in your browser to use the voice assistant.
+
+

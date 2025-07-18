@@ -89,7 +89,7 @@ export function useVapi() {
 
   const start = async () => {
     setCallStatus(CALL_STATUS.LOADING);
-    const response = vapi.start(characterAssistant);
+    const response = vapi.start(import.meta.env.VITE_VAPI_AGENT_ID);
 
     response.then((res) => {
       console.log("call", res);

@@ -19,7 +19,17 @@ This project is a **real-time AI voice assistant** built using **React** and **V
 
 ---
 
+## 🖥️ Prerequisites
+
+If you're setting this up on a new system, follow these steps first:
+
+Install Node.js (LTS version)
+Download from: https://nodejs.org
+
+This includes npm, which is the Node Package Manager.
+
 ## 🚀 Getting Started
+
 
 ### 1. Clone the Repository
 

@@ -7,7 +7,6 @@ function CharacterDetails() {
   const [characterDetails, setCharacterDetails] = React.useState<
     Record<string, string>
   >({});
-
   const [editKey, setEditKey] = React.useState<string | null>(null);
   const [editValue, setEditValue] = React.useState<string>("");
 
@@ -56,45 +55,47 @@ function CharacterDetails() {
     setEditKey(null);
     setEditValue("");
   };
+
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {Object.keys(characterDetails).map((key: string) => (
-        <div className="flex flex-row gap-2 justify-between w-full" key={key}>
-          <h1 className="font-bold capitalize">{key}</h1>
-          <div className="flex">
+        <div
+          key={key}
+          className="w-full bg-gray-100 px-4 py-3 rounded-lg shadow-sm flex flex-col"
+        >
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium capitalize text-gray-700">
+              {key}
+            </span>
+            {editKey === key ? (
+              <div className="flex gap-1">
+                <button onClick={handleCancel}>
+                  <X size={16} className="text-red-500" />
+                </button>
+                <button onClick={handleSave}>
+                  <Check size={16} className="text-green-500" />
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => handleEdit(key)}>
+                <Pencil size={16} className="text-blue-500" />
+              </button>
+            )}
+          </div>
+          <div className="mt-2">
             {editKey === key ? (
               <textarea
                 value={editValue}
-                className="border-0 h-auto focus-visible:ring-0 focus-visible:outline-none"
                 onChange={handleEditChange}
+                className="w-full text-sm px-2 py-1 border rounded focus:outline-none focus:ring focus:border-blue-300"
               />
             ) : (
-              <div className="transition text-right ">
-                {characterDetails[key]}
-              </div>
-            )}
-            {editKey === key ? (
-              <div className="right-0 top-0 flex">
-                <button onClick={handleCancel} className="py-1">
-                  <X size={16} className="font-bold text-red-500" />
-                </button>
-                <button className="py-1">
-                  <Check
-                    size={16}
-                    onClick={handleSave}
-                    className="font-bold text-green-500"
-                  />
-                </button>
-              </div>
-            ) : (
-              <button className="p-1" onClick={() => handleEdit(key)}>
-                <Pencil size={16} className="font-bold text-blue-500" />
-              </button>
+              <p className="text-sm text-gray-800">{characterDetails[key]}</p>
             )}
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 

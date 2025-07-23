@@ -4,7 +4,6 @@ import { MessageList } from "./features/Messages";
 import { useVapi } from "./features/Assistant";
 import { CharacterPreview } from "./features/Character";
 import { useEffect, useRef, useState } from "react";
-import { MessageTypeEnum, TranscriptMessageTypeEnum } from "@/lib/types/conversation.type";
 
 function App() {
   const scrollAreaRef = useRef<any>(null);
@@ -19,54 +18,6 @@ function App() {
 
   const { toggleCall, messages, callStatus, activeTranscript, audioLevel } =
     useVapi();
-
-  const [input, setInput] = useState("");
-  const [localMessages, setLocalMessages] = useState([]);
-
-  // Combine Vapi messages with local messages
-  const allMessages = [...messages, ...localMessages];
-  
-  // Debug logging
-  console.log("Vapi messages:", messages);
-  console.log("Local messages:", localMessages);
-  console.log("All messages:", allMessages);
-
-  const handleSend = () => {
-    if (!input.trim()) return;
-
-    console.log("Sending message:", input); // Debug log
-    console.log("MessageTypeEnum.TRANSCRIPT:", MessageTypeEnum.TRANSCRIPT); // Debug log
-    console.log("TranscriptMessageTypeEnum.FINAL:", TranscriptMessageTypeEnum.FINAL); // Debug log
-
-    // Create user message object - using transcript property instead of content
-    const userMessage = {
-      type: MessageTypeEnum.TRANSCRIPT,
-      role: "user",
-      transcript: input, // Changed from 'content' to 'transcript'
-      timestamp: new Date().toISOString(),
-      transcriptType: TranscriptMessageTypeEnum.FINAL
-    };
-
-    console.log("Created user message:", userMessage); // Debug log
-
-    // Add to local messages state
-    setLocalMessages(prev => {
-      const updated = [...prev, userMessage];
-      console.log("Updated local messages:", updated); // Debug log
-      return updated;
-    });
-
-    // Send to Vapi
-    vapi.sendText?.(input);
-
-    setInput(""); // Clear input field after sending
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSend();
-    }
-  };
 
   useEffect(() => {
     vapi.on("message", scrollToBottom);
@@ -88,43 +39,59 @@ function App() {
             viewportRef={viewportRef}
             className="h-[90vh] flex flex-1 p-4"
           >
-            <div className="flex flex-1 flex-col min-h-[85vh] justify-end pb-32">
-              {/* 👆 Added bottom padding here */}
+            <div className="flex flex-1 flex-col min-h-[85vh] justify-end pb-20">
+              {/* 👆 Reduced bottom padding since footer is smaller now */}
               <MessageList
-                messages={allMessages}
+                messages={messages}
                 activeTranscript={activeTranscript}
               />
             </div>
           </ScrollArea>
         </div>
 
-        {/* Footer input section */}
+        {/* Footer with centered microphone and visual elements */}
         <div
           id="card-footer"
           className="absolute bottom-0 left-0 right-0 px-6 pb-4 z-10"
         >
-          <div className="flex items-center bg-white rounded-full shadow-md px-4 py-0.2 gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-grow px-4 py-2 rounded-full outline-none text-sm"
-            />
-            <button 
-              onClick={handleSend}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-full text-sm">
-              Send
-            </button>
-            <div className="bg-green-500 hover:bg-green-600 p-0.5 rounded-full text-white cursor-pointer">
-              <div className="scale-50"></div>
-              <VapiButton
-                audioLevel={audioLevel}
-                callStatus={callStatus}
-                toggleCall={toggleCall}
-              />
+          <div className="flex items-center justify-center">
+            {/* Left decorative elements */}
+            <div className="flex items-center space-x-2 mr-8">
+              <div className={`w-2 h-2 rounded-full ${callStatus === 'active' ? 'bg-green-400 animate-pulse' : 'bg-gray-300'}`}></div>
+              <div className={`w-1.5 h-1.5 rounded-full ${callStatus === 'active' ? 'bg-green-300 animate-pulse' : 'bg-gray-200'}`} style={{animationDelay: '0.2s'}}></div>
+              <div className={`w-1 h-1 rounded-full ${callStatus === 'active' ? 'bg-green-200 animate-pulse' : 'bg-gray-100'}`} style={{animationDelay: '0.4s'}}></div>
             </div>
+
+            {/* Main microphone button */}
+            <div className="relative">
+              {/* Pulsing ring when active */}
+              {callStatus === 'active' && (
+                <div className="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-30"></div>
+              )}
+              <div className="bg-green-500 hover:bg-green-600 p-3 rounded-full text-white cursor-pointer shadow-lg relative z-10 transition-all duration-200 hover:scale-105">
+                <VapiButton
+                  audioLevel={audioLevel}
+                  callStatus={callStatus}
+                  toggleCall={toggleCall}
+                />
+              </div>
+            </div>
+
+            {/* Right decorative elements */}
+            <div className="flex items-center space-x-2 ml-8">
+              <div className={`w-1 h-1 rounded-full ${callStatus === 'active' ? 'bg-green-200 animate-pulse' : 'bg-gray-100'}`} style={{animationDelay: '0.4s'}}></div>
+              <div className={`w-1.5 h-1.5 rounded-full ${callStatus === 'active' ? 'bg-green-300 animate-pulse' : 'bg-gray-200'}`} style={{animationDelay: '0.2s'}}></div>
+              <div className={`w-2 h-2 rounded-full ${callStatus === 'active' ? 'bg-green-400 animate-pulse' : 'bg-gray-300'}`}></div>
+            </div>
+          </div>
+
+          {/* Status text */}
+          <div className="text-center mt-2">
+            <p className="text-xs text-gray-500">
+              {callStatus === 'active' ? 'Listening...' : 
+               callStatus === 'loading' ? 'Connecting...' : 
+               'Tap to speak'}
+            </p>
           </div>
         </div>
       </div>
